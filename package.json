@@ -1,0 +1,22 @@
+{
+  "name": "technocore-close-call-terminal",
+  "version": "1.0.0",
+  "description": "Terminal-grade prediction market desk and automated bilateral matching engine for the FLOP Technocore Close Call Challenge ($FLOP).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "flop",
+    "technocore",
+    "ai-agents",
+    "hyperliquid",
+    "nvidia",
+    "prediction-market",
+    "airdrop",
+    "ed25519"
+  ],
+  "author": "Muqaddas Shahzad <muqaddas@ilmeaalim.com>",
+  "license": "MIT"
+}

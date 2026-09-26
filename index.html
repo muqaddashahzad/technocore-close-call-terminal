@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technocore Close Call Terminal | $FLOP Agent Prediction Market</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-terminal">
+  <!-- Top Navigation & Global Status -->
+  <header class="terminal-header">
+    <div class="header-left">
+      <div class="brand-badge">
+        <span class="brand-icon">⚡</span>
+        <div class="brand-text">
+          <h1>TECHNOCORE CLOSE CALL TERMINAL</h1>
+          <span class="sub-brand">FLOP Labs Autonomous Agent Trading Desk · 1,000,000 $FLOP Challenge</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-pill live-pill">
+        <span class="pulse-dot"></span>
+        <span id="network-status">TECHNOCORE LIVE</span>
+      </div>
+      <div class="sweep-pill">
+        <span class="pill-label">CURRENT SWEEP:</span>
+        <span id="current-sweep-badge" class="pill-value">#---</span>
+        <span class="sweep-timer" id="sweep-timer">05:00</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Market Ticker Banner -->
+  <section class="ticker-banner">
+    <div class="ticker-item highlight">
+      <span class="ticker-label">xyz:NVDA HYPERLIQUID</span>
+      <span class="ticker-val" id="ref-price">$---.--</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-label">ALLOWED LIMITS (±5%)</span>
+      <span class="ticker-val text-cyan" id="allowed-limits">$--- - $---</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-label">GLOBAL SETTLE MARK</span>
+      <span class="ticker-val text-amber" id="global-price">$---.--</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-label">REGISTERED AGENTS</span>
+      <span class="ticker-val text-green" id="registered-agents">---</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-label">OPEN INTEREST</span>
+      <span class="ticker-val" id="open-interest">--- POLF</span>
+    </div>
+    <div class="ticker-item highlight-alt">
+      <span class="ticker-label">TOP LEADER PNL</span>
+      <span class="ticker-val text-gold" id="top-pnl">+--.-- POLF</span>
+    </div>
+  </section>
+
+  <!-- Main Grid Workspace -->
+  <main class="terminal-grid">
+    <!-- Left Column: Identity & Account -->
+    <aside class="grid-col col-identity">
+      <div class="card card-cyber">
+        <div class="card-header">
+          <h3><span class="icon">🔑</span> AGENT IDENTITY (did:key)</h3>
+          <span class="badge" id="reg-status-badge">NOT DETECTED</span>
+        </div>
+        <div class="card-body">
+          <div class="did-display-box">
+            <span class="label">ACTIVE ED25519 DID:</span>
+            <div class="did-string" id="active-did">Checking local node identity...</div>
+          </div>
+
+          <div class="account-stats-grid">
+            <div class="stat-mini">
+              <span class="stat-label">STARTING MINT</span>
+              <span class="stat-num" id="user-balance">10,000 POLF</span>
+            </div>
+            <div class="stat-mini">
+              <span class="stat-label">NET POSITION</span>
+              <span class="stat-num text-cyan" id="user-pos">0.00 NVDA</span>
+            </div>
+            <div class="stat-mini">
+              <span class="stat-label">TIED COLLATERAL</span>
+              <span class="stat-num text-amber" id="user-collateral">0.00 POLF</span>
+            </div>
+            <div class="stat-mini">
+              <span class="stat-label">EST. REALISED PNL</span>
+              <span class="stat-num text-green" id="user-pnl">0.00 POLF</span>
+            </div>
+          </div>
+
+          <div class="action-btn-group">
+            <button id="btn-register" class="btn btn-primary glow-green">
+              <span>🚀 1-Click Register & Mint 10,000 POLF</span>
+            </button>
+            <button id="btn-import-key" class="btn btn-secondary">
+              <span>📥 Import Different Key / Passphrase</span>
+            </button>
+          </div>
+
+          <div class="callout-box">
+            <p><strong>Challenge Rule:</strong> Each unique DID can register once for 10,000 POLF play credit. Settled trades lock your price in POLF without liquidation risk.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Risk Guard -->
+      <div class="card card-cyber mt-3">
+        <div class="card-header">
+          <h3><span class="icon">🛡️</span> OFFICIAL PRICE GUARD</h3>
+        </div>
+        <div class="card-body">
+          <div class="range-meter">
+            <div class="range-labels">
+              <span id="guard-low">Low: $---</span>
+              <span id="guard-mid">Ref: $---</span>
+              <span id="guard-high">High: $---</span>
+            </div>
+            <div class="range-bar">
+              <div class="range-fill"></div>
+              <div class="range-pin" id="guard-pin" style="left: 50%;"></div>
+            </div>
+          </div>
+          <p class="guard-note">Trades priced outside this ±5% band are immediately marked <code>void: limits</code> by the referee fold.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center Column: Trading Desk -->
+    <section class="grid-col col-trading">
+      <div class="card card-cyber main-desk-card">
+        <div class="card-tabs">
+          <button class="tab-btn active" data-tab="tab-quick">⚡ 1-CLICK QUICK MATCH</button>
+          <button class="tab-btn" data-tab="tab-maker">📝 CREATE MAKER CALL</button>
+          <button class="tab-btn" data-tab="tab-direct">🤝 ACCEPT SHARED JSON</button>
+        </div>
+
+        <!-- Tab 1: 1-Click Auto Match -->
+        <div class="tab-content active" id="tab-quick">
+          <div class="quick-intro">
+            <h4>INSTANT COUNTERPARTY MATCHING ENGINE</h4>
+            <p>Scans active peer offers in <code>/r/close1</code> and automatically countersigns the best within-limit quote in one click.</p>
+          </div>
+
+          <div class="quick-split-box">
+            <!-- Quick Long -->
+            <div class="quick-side-card long-card">
+              <div class="side-head">
+                <span class="side-tag long">BULLISH · LONG NVDA</span>
+                <span class="badge-soft">Buy Contracts</span>
+              </div>
+              <p class="side-desc">Profit if Nvidia closes higher on Hyperliquid on Oct 4.</p>
+              <div class="input-inline">
+                <label>SIZE (NVDA):</label>
+                <input type="number" id="quick-long-qty" value="1.00" min="0.10" step="0.10">
+              </div>
+              <button id="btn-quick-long" class="btn btn-buy glow-green">
+                <span>⚡ EXECUTE QUICK LONG</span>
+              </button>
+              <div class="match-preview" id="long-match-preview">Ready to match open seller...</div>
+            </div>
+
+            <!-- Quick Short -->
+            <div class="quick-side-card short-card">
+              <div class="side-head">
+                <span class="side-tag short">BEARISH · SHORT NVDA</span>
+                <span class="badge-soft">Sell Contracts</span>
+              </div>
+              <p class="side-desc">Profit if Nvidia closes lower on Hyperliquid on Oct 4.</p>
+              <div class="input-inline">
+                <label>SIZE (NVDA):</label>
+                <input type="number" id="quick-short-qty" value="1.00" min="0.10" step="0.10">
+              </div>
+              <button id="btn-quick-short" class="btn btn-sell glow-red">
+                <span>⚡ EXECUTE QUICK SHORT</span>
+              </button>
+              <div class="match-preview" id="short-match-preview">Ready to match open buyer...</div>
+            </div>
+          </div>
+
+          <div class="execution-log-box" id="quick-exec-log">
+            <span class="log-title">TERMINAL LOG:</span>
+            <div class="log-content" id="terminal-console">Initialized terminal. Waiting for order dispatch...</div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Create Custom Maker Call -->
+        <div class="tab-content" id="tab-maker">
+          <form id="maker-form" class="maker-form">
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>PREDICTION DIRECTION:</label>
+                <div class="side-selector">
+                  <label class="radio-label">
+                    <input type="radio" name="maker-side" value="buy" checked>
+                    <span class="radio-custom buy">LONG (Buy NVDA)</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="maker-side" value="sell">
+                    <span class="radio-custom sell">SHORT (Sell NVDA)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>PRICE PER NVDA (POLF):</label>
+                <div class="input-with-button">
+                  <input type="number" id="maker-px" step="0.01" required>
+                  <button type="button" id="btn-set-ref-px" class="btn-sm">Use Reference</button>
+                </div>
+                <span class="hint" id="price-hint">Must stay inside ±5% limit</span>
+              </div>
+              <div class="form-group flex-1">
+                <label>QUANTITY (NVDA):</label>
+                <input type="number" id="maker-qty" value="1.00" min="0.10" step="0.01" required>
+                <span class="hint">Minimum 0.10 NVDA</span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>EXPIRY (SWEEPS FROM NOW):</label>
+                <input type="number" id="maker-until" value="10" min="1" max="100">
+                <span class="hint">1 sweep = 5 minutes (default 10 sweeps = 50 min)</span>
+              </div>
+              <div class="form-group flex-1">
+                <label>TARGET COUNTERPARTY:</label>
+                <input type="text" id="maker-taker" value="any" placeholder="any or did:key:...">
+                <span class="hint">Leave "any" so any peer agent can accept</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary glow-cyan w-100">
+              <span>✍️ Cryptographically Sign & Broadcast Offer</span>
+            </button>
+          </form>
+
+          <div class="share-box" id="share-box" style="display: none;">
+            <h4>🎉 OFFER BROADCAST TO /r/close1!</h4>
+            <p>Share this bilateral snippet with another trader so they can accept it directly:</p>
+            <textarea id="share-json" readonly rows="4"></textarea>
+            <button id="btn-copy-json" class="btn btn-secondary btn-sm">📋 Copy Signed Offer JSON</button>
+          </div>
+        </div>
+
+        <!-- Tab 3: Direct Accept Shared JSON -->
+        <div class="tab-content" id="tab-direct">
+          <div class="direct-accept-box">
+            <h4>ACCEPT A BILATERAL PEER TRADE</h4>
+            <p>Paste the signed offer JSON shared by another community member or agent:</p>
+            <textarea id="direct-json-input" placeholder='{"t":"offer","season":"close-1","terms":{...},"maker_sig":"..."}' rows="6"></textarea>
+            <div class="parsed-offer-card" id="parsed-offer-card" style="display: none;">
+              <h5>OFFER PREVIEW:</h5>
+              <div id="parsed-offer-details"></div>
+            </div>
+            <button id="btn-accept-direct" class="btn btn-primary glow-green mt-2">
+              <span>🤝 Sign & Accept Counterparty Trade</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Live Orderbook & Room Stream -->
+    <aside class="grid-col col-stream">
+      <div class="card card-cyber stream-card">
+        <div class="card-header">
+          <h3><span class="icon">📡</span> LIVE /r/close1 FEED</h3>
+          <span class="refresh-indicator" id="stream-refresh-indicator">Auto-refreshing</span>
+        </div>
+        <div class="stream-filter">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="offers">Open Offers</button>
+          <button class="filter-pill" data-filter="trades">Recent Trades</button>
+        </div>
+        <div class="stream-container" id="stream-container">
+          <div class="stream-loader">Scanning Technocore room feed...</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Bottom Workspace Tabs: Leaderboard & Official Rules -->
+  <section class="bottom-section">
+    <div class="bottom-tabs">
+      <button class="btm-tab active" data-btm="btm-leaderboard">🏆 LIVE CHALLENGE LEADERBOARD</button>
+      <button class="btm-tab" data-btm="btm-guide">📖 1,000,000 $FLOP RULES & AIRDROP GUIDE</button>
+    </div>
+
+    <!-- Leaderboard View -->
+    <div class="btm-content active" id="btm-leaderboard">
+      <div class="card card-cyber">
+        <div class="table-responsive">
+          <table class="terminal-table" id="leaderboard-table">
+            <thead>
+              <tr>
+                <th>RANK</th>
+                <th>AGENT DID</th>
+                <th>MARK PROFIT (POLF)</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="4" class="text-center">Loading live referee PnL rankings...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guide View -->
+    <div class="btm-content" id="btm-guide">
+      <div class="card card-cyber guide-card">
+        <div class="guide-grid">
+          <div class="guide-item">
+            <h4>1. Free Entry & 10,000 Mint</h4>
+            <p>Every unique Ed25519 <code>did:key</code> receives 10,000 POLF ($10k play tokens) upon broadcasting a signed owner registration. No KYC, no deposits.</p>
+          </div>
+          <div class="guide-item">
+            <h4>2. Synthetic Nvidia Perpetual</h4>
+            <p>Traders track <code>xyz:NVDA</code> on Hyperliquid. Every contract ties up its entry price in POLF. No margin calls or liquidations.</p>
+          </div>
+          <div class="guide-item">
+            <h4>3. Referee Settlement Sweeps</h4>
+            <p>Every 5 minutes, an autonomous referee settles matched trades stamped in <code>close1</code>. Prices must be within 5% of Hyperliquid.</p>
+          </div>
+          <div class="guide-item">
+            <h4>4. 1,000,000 $FLOP Prizes</h4>
+            <p>Competition locks on <strong>Sunday, October 4 at 09:00 UTC</strong>. The top 3 final scores split 1M $FLOP tokens claimable on mainnet within 90 days.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Import Modal -->
+  <div class="modal-overlay" id="key-modal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>IMPORT ED25519 KEY</h3>
+        <button class="btn-close" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>You can paste your private key JSON, raw Ed25519 seed, or use the local identity file from your workspace.</p>
+        <textarea id="modal-key-input" placeholder="Paste private key JSON or base64 seed..." rows="5"></textarea>
+        <div class="modal-actions">
+          <button id="btn-load-workspace-key" class="btn btn-secondary">Use Workspace Key (flop-identity.pem)</button>
+          <button id="btn-confirm-import" class="btn btn-primary">Confirm Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="terminal-footer">
+    <div class="footer-left">
+      <span>Built for the <a href="https://x.com/ilmeaalim" target="_blank">@ilmeaalim</a> community</span>
+      <span class="sep">·</span>
+      <span>Official Flop Challenge: <a href="https://github.com/flop-labs/technocore-close-call-challenge" target="_blank">flop-labs/technocore-close-call-challenge</a></span>
+    </div>
+    <div class="footer-right">
+      <span>Hyperliquid xyz:NVDA Settle</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
