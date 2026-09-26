@@ -97,11 +97,39 @@ async function initIdentity() {
   }
 }
 
-// 2. Fetch Market Data
+// 2. Fetch Market Data (with direct technocore.chat fallback for GitHub Pages)
 async function fetchMarket() {
   try {
-    const res = await fetch('/api/market');
-    const data = await res.json();
+    let data = null;
+    try {
+      const res = await fetch('/api/market');
+      if (res.ok) data = await res.json();
+    } catch (e) {}
+
+    // Fallback: direct browser fetch from technocore.chat (CORS enabled)
+    if (!data || !data.price) {
+      const [priceRes, stateRes, pnlRes, posRes] = await Promise.all([
+        fetch('https://technocore.chat/r/d-close1-price?limit=1&format=json').then(r => r.json()).catch(() => null),
+        fetch('https://technocore.chat/r/d-close1-state?limit=1&format=json').then(r => r.json()).catch(() => null),
+        fetch('https://technocore.chat/r/d-close1-pnl?limit=1&format=json').then(r => r.json()).catch(() => null),
+        fetch('https://technocore.chat/r/d-close1-positions?limit=1&format=json').then(r => r.json()).catch(() => null)
+      ]);
+
+      let price = null, state = null, pnl = null, pos = null;
+      if (priceRes && priceRes.messages && priceRes.messages.length) {
+        try { price = JSON.parse(priceRes.messages[0].text); } catch (e) {}
+      }
+      if (stateRes && stateRes.messages && stateRes.messages.length) {
+        try { state = JSON.parse(stateRes.messages[0].text); } catch (e) {}
+      }
+      if (pnlRes && pnlRes.messages && pnlRes.messages.length) {
+        try { pnl = JSON.parse(pnlRes.messages[0].text); } catch (e) {}
+      }
+      if (posRes && posRes.messages && posRes.messages.length) {
+        try { pos = JSON.parse(posRes.messages[0].text); } catch (e) {}
+      }
+      data = { price, state, pnl, pos };
+    }
 
     if (data.price) {
       const p = data.price;
@@ -151,13 +179,37 @@ async function fetchMarket() {
   }
 }
 
-// 3. Fetch Stream & Offers
+// 3. Fetch Stream & Offers (with direct fallback)
 async function fetchOffers() {
   try {
-    const res = await fetch('/api/offers');
-    const data = await res.json();
-    STATE.offers = data.offers || [];
-    STATE.trades = data.trades || [];
+    let offers = [], trades = [];
+    try {
+      const res = await fetch('/api/offers');
+      if (res.ok) {
+        const d = await res.json();
+        offers = d.offers || [];
+        trades = d.trades || [];
+      }
+    } catch (e) {}
+
+    if (!offers.length && !trades.length) {
+      const roomRes = await fetch('https://technocore.chat/r/close1?limit=50&format=json').then(r => r.json()).catch(() => null);
+      if (roomRes && roomRes.messages) {
+        for (const msg of roomRes.messages) {
+          try {
+            const parsed = JSON.parse(msg.text);
+            if (parsed.t === 'offer' && parsed.terms && parsed.terms.taker === 'any') {
+              offers.push({ seq: msg.seq, ts: msg.ts, from: msg.from, terms: parsed.terms, maker_sig: parsed.maker_sig });
+            } else if (parsed.t === 'trade' && parsed.terms) {
+              trades.push({ seq: msg.seq, ts: msg.ts, from: msg.from, terms: parsed.terms, taker: parsed.taker });
+            }
+          } catch (e) {}
+        }
+      }
+    }
+
+    STATE.offers = offers;
+    STATE.trades = trades;
 
     updateQuickMatchPreviews();
     renderStream();
