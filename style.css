@@ -1578,3 +1578,281 @@ body.dark-terminal {
   color: var(--red);
   border: 1px solid rgba(255, 71, 87, 0.3);
 }
+
+/* =====================================================================
+   LIVE CHALLENGE LEADERBOARD & AGENT RANK CHECKER STYLES
+   ===================================================================== */
+.leaderboard-card {
+  padding: 20px;
+}
+
+.lb-header-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lb-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lb-title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+/* 4 Metrics Pills */
+.lb-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.lb-stat-pill {
+  background: var(--bg-card-sub);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.lb-stat-pill:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+}
+
+.lb-stat-pill.highlight-gold {
+  border-color: rgba(255, 215, 0, 0.4);
+  background: rgba(255, 215, 0, 0.05);
+}
+
+.lb-stat-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.lb-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.lb-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.lb-stat-val {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  margin: 2px 0;
+}
+
+.lb-stat-sub {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* Top 3 Podium */
+.podium-section {
+  margin-bottom: 24px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.podium-title {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.podium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.podium-card {
+  border-radius: var(--radius);
+  padding: 14px;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.podium-card:hover {
+  transform: translateY(-2px);
+}
+
+.podium-card.gold {
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+  background: linear-gradient(180deg, rgba(255, 215, 0, 0.08) 0%, rgba(20, 24, 33, 0.9) 100%);
+}
+
+.podium-card.silver {
+  border-color: rgba(192, 192, 192, 0.6);
+  box-shadow: 0 0 15px rgba(192, 192, 192, 0.1);
+  background: linear-gradient(180deg, rgba(192, 192, 192, 0.08) 0%, rgba(20, 24, 33, 0.9) 100%);
+}
+
+.podium-card.bronze {
+  border-color: rgba(205, 127, 50, 0.6);
+  box-shadow: 0 0 15px rgba(205, 127, 50, 0.1);
+  background: linear-gradient(180deg, rgba(205, 127, 50, 0.08) 0%, rgba(20, 24, 33, 0.9) 100%);
+}
+
+.podium-rank-badge {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  margin-bottom: 6px;
+}
+
+.podium-pnl {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  margin-bottom: 6px;
+}
+
+.podium-did {
+  margin-bottom: 10px;
+}
+
+.podium-did code {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+/* Agent Rank Checker */
+.rank-checker-box {
+  background: rgba(0, 229, 255, 0.03);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.checker-header {
+  margin-bottom: 12px;
+}
+
+.checker-header h4 {
+  font-size: 13px;
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  margin-bottom: 2px;
+}
+
+.checker-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.checker-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.checker-form input {
+  flex: 1;
+  min-width: 260px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+.rank-result-card {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 6px;
+  background: var(--bg-card-sub);
+  border: 1px solid var(--border-color);
+}
+
+.rank-result-card.highlight {
+  border-color: var(--green);
+  background: rgba(0, 255, 157, 0.05);
+}
+
+.rank-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rank-result-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-color);
+}
+
+/* Table Controls */
+.lb-table-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lb-table-title h4 {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.rank-medal {
+  display: inline-block;
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.table-row-gold {
+  background: rgba(255, 215, 0, 0.04);
+}
+
+.table-row-me {
+  background: rgba(0, 255, 157, 0.08) !important;
+  border-left: 3px solid var(--green);
+}
+
