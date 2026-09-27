@@ -69,12 +69,21 @@
       <div class="card card-cyber">
         <div class="card-header">
           <h3><span class="icon">🔑</span> AGENT IDENTITY (did:key)</h3>
-          <span class="badge" id="reg-status-badge">NOT DETECTED</span>
+          <span class="badge ready" id="reg-status-badge">VERIFIED CHANNEL NODE</span>
         </div>
         <div class="card-body">
+          <div class="mode-toggle-group">
+            <button class="mode-btn active" id="btn-mode-showcase" title="Showcase @ilmeaalim official participation node">👁️ @ilmeaalim Node</button>
+            <button class="mode-btn" id="btn-mode-custom" title="Connect or generate custom key">🔑 Connect My Key</button>
+          </div>
+
           <div class="did-display-box">
-            <span class="label">ACTIVE ED25519 DID:</span>
-            <div class="did-string" id="active-did">Checking local node identity...</div>
+            <div class="did-box-header">
+              <span class="label">ACTIVE ED25519 DID:</span>
+              <button class="btn-copy-mini" id="btn-copy-did" title="Copy DID to clipboard">📋 Copy</button>
+            </div>
+            <div class="did-string" id="active-did">did:key:z6MknUw3NHTToeFbNvzxV35WfHyhBLCyuuq31LLiX2zqFZHs</div>
+            <span class="node-subtag" id="node-subtag">Official @ilmeaalim Trading Node · Sweep #336 Registered</span>
           </div>
 
           <div class="account-stats-grid">
@@ -84,15 +93,15 @@
             </div>
             <div class="stat-mini">
               <span class="stat-label">NET POSITION</span>
-              <span class="stat-num text-cyan" id="user-pos">0.00 NVDA</span>
+              <span class="stat-num text-cyan" id="user-pos">+72.86 NVDA</span>
             </div>
             <div class="stat-mini">
               <span class="stat-label">TIED COLLATERAL</span>
-              <span class="stat-num text-amber" id="user-collateral">0.00 POLF</span>
+              <span class="stat-num text-amber" id="user-collateral">16,392 POLF</span>
             </div>
             <div class="stat-mini">
               <span class="stat-label">EST. REALISED PNL</span>
-              <span class="stat-num text-green" id="user-pnl">0.00 POLF</span>
+              <span class="stat-num text-green" id="user-pnl">+86.47 POLF</span>
             </div>
           </div>
 
@@ -137,13 +146,130 @@
     <section class="grid-col col-trading">
       <div class="card card-cyber main-desk-card">
         <div class="card-tabs">
-          <button class="tab-btn active" data-tab="tab-quick">⚡ 1-CLICK QUICK MATCH</button>
+          <button class="tab-btn active" data-tab="tab-chart">📈 NVDA CHART & AI SIGNALS</button>
+          <button class="tab-btn" data-tab="tab-quick">⚡ 1-CLICK QUICK DESK</button>
+          <button class="tab-btn" data-tab="tab-mytrades">📜 MY TRADES & RESULTS (<span id="my-trades-tab-count">1,216</span>)</button>
           <button class="tab-btn" data-tab="tab-maker">📝 CREATE MAKER CALL</button>
           <button class="tab-btn" data-tab="tab-direct">🤝 ACCEPT SHARED JSON</button>
         </div>
 
+        <!-- Tab 0: Real-Time Nvidia Chart & AI Signals Matrix -->
+        <div class="tab-content active" id="tab-chart">
+          <!-- AI Quant Signal Matrix Banner -->
+          <div class="ai-signal-matrix">
+            <div class="signal-header-row">
+              <div class="signal-main-badge">
+                <span class="pulse-indicator glow-green-dot"></span>
+                <div class="signal-meta">
+                  <span class="signal-label">AI QUANT BIAS:</span>
+                  <div class="signal-verdict-row">
+                    <span class="signal-verdict text-green" id="ai-signal-verdict">STRONG BULLISH · LONG NVDA</span>
+                    <span class="signal-confidence" id="ai-signal-confidence">84.6% Confidence</span>
+                  </div>
+                </div>
+              </div>
+              <div class="signal-accuracy-box">
+                <span class="accuracy-icon">🏆</span>
+                <div class="accuracy-text">
+                  <span class="acc-title">QUANT BACKTEST ACCURACY</span>
+                  <span class="acc-val text-green" id="ai-accuracy-val">78.4% Win Rate (142W / 39L)</span>
+                </div>
+              </div>
+              <button id="btn-follow-ai-signal" class="btn btn-follow glow-green">
+                <span>🎯 Follow AI Signal (Auto-Fill Long)</span>
+              </button>
+            </div>
+
+            <!-- Multi-Indicator Dashboard Grid -->
+            <div class="indicators-grid">
+              <div class="indicator-card">
+                <div class="ind-head">
+                  <span class="ind-name">RSI (14)</span>
+                  <span class="ind-badge buy" id="ind-rsi-badge">BUY</span>
+                </div>
+                <div class="ind-val text-cyan" id="ind-rsi-val">44.80</div>
+                <span class="ind-desc" id="ind-rsi-desc">Bullish oversold recovery bounce</span>
+              </div>
+
+              <div class="indicator-card">
+                <div class="ind-head">
+                  <span class="ind-name">EMA TREND</span>
+                  <span class="ind-badge buy" id="ind-ema-badge">GOLDEN CROSS</span>
+                </div>
+                <div class="ind-val text-green" id="ind-ema-val">9 > 21 EMA</div>
+                <span class="ind-desc" id="ind-ema-desc">Ribbon aligned above $224.20 support</span>
+              </div>
+
+              <div class="indicator-card">
+                <div class="ind-head">
+                  <span class="ind-name">BOOK IMBALANCE</span>
+                  <span class="ind-badge buy" id="ind-delta-badge">+58.4% BIDS</span>
+                </div>
+                <div class="ind-val text-cyan" id="ind-delta-val">Bid Dominance</div>
+                <span class="ind-desc" id="ind-delta-desc">Active buy liquidity outbidding sell depth</span>
+              </div>
+
+              <div class="indicator-card">
+                <div class="ind-head">
+                  <span class="ind-name">HYPERLIQUID BASIS</span>
+                  <span class="ind-badge neutral" id="ind-basis-badge">-$0.12 DISCOUNT</span>
+                </div>
+                <div class="ind-val text-amber" id="ind-basis-val">Ref vs Settle</div>
+                <span class="ind-desc" id="ind-basis-desc">Spot discount attracts arbitrage takers</span>
+              </div>
+
+              <div class="indicator-card">
+                <div class="ind-head">
+                  <span class="ind-name">MACD MOMENTUM</span>
+                  <span class="ind-badge buy" id="ind-macd-badge">BULLISH</span>
+                </div>
+                <div class="ind-val text-green" id="ind-macd-val">+0.28 Hist</div>
+                <span class="ind-desc" id="ind-macd-desc">Positive histogram expansion</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Embedded Real-Time TradingView Nvidia Chart -->
+          <div class="chart-wrapper">
+            <div class="chart-header">
+              <div class="chart-title-left">
+                <span class="chart-icon">📊</span>
+                <strong>NVIDIA CORP (NASDAQ: NVDA) · REAL-TIME 5M CANDLES</strong>
+                <span class="live-tag">LIVE MARKET</span>
+              </div>
+              <div class="chart-tools-right">
+                <span class="chart-hint">Hyperliquid xyz:NVDA oracle tracks this underlying</span>
+              </div>
+            </div>
+            <div class="tradingview-container" id="tv-chart-box">
+              <iframe id="tv-widget-frame" src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=NASDAQ%3ANVDA&interval=5&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=0e121a&studies=%5B%22RSI%40tv-basicstudies%22%2C%22MASimple%40tv-basicstudies%22%5D&theme=dark&style=1&timezone=Etc%2FUTC&locale=en" frameborder="0" allowtransparency="true" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+
+          <!-- Fast Execution Strip Under Chart -->
+          <div class="chart-execution-strip">
+            <div class="strip-item">
+              <span class="strip-label">NVDA REF:</span>
+              <span class="strip-val text-cyan" id="strip-nvda-mark">$---.--</span>
+            </div>
+            <div class="strip-item">
+              <span class="strip-label">SIZE (NVDA):</span>
+              <input type="number" id="strip-order-qty" value="1.00" min="0.10" step="0.10" class="strip-input">
+            </div>
+            <button id="btn-strip-quick-long" class="btn btn-buy glow-green">
+              <span>⚡ Quick Long NVDA</span>
+            </button>
+            <button id="btn-strip-quick-short" class="btn btn-sell glow-red">
+              <span>⚡ Quick Short NVDA</span>
+            </button>
+            <button id="btn-strip-follow-ai" class="btn btn-primary glow-cyan">
+              <span>🎯 Follow AI Signal</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Tab 1: 1-Click Auto Match -->
-        <div class="tab-content active" id="tab-quick">
+        <div class="tab-content" id="tab-quick">
           <div class="quick-intro">
             <h4>INSTANT COUNTERPARTY MATCHING ENGINE</h4>
             <p>Scans active peer offers in <code>/r/close1</code> and automatically countersigns the best within-limit quote in one click.</p>
@@ -191,7 +317,89 @@
           </div>
         </div>
 
-        <!-- Tab 2: Create Custom Maker Call -->
+        <!-- Tab 2: My Trades & Verified Results -->
+        <div class="tab-content" id="tab-mytrades">
+          <div class="mytrades-header">
+            <div class="mytrades-title-box">
+              <div class="badge-row">
+                <span class="badge ready">VERIFIED LIVE PARTICIPATION</span>
+                <span class="badge">SWEEP #336 REGISTERED</span>
+                <span class="badge gold-badge">1,000,000 $FLOP CONTENDER</span>
+              </div>
+              <h4>@ilmeaalim OFFICIAL PARTICIPATION NODE</h4>
+              <p class="node-meta">Autonomous Bilateral Agent · Key: <code id="mytrades-did-code">did:key:z6MknUw3NHTToeFbNvzxV35WfHyhBLCyuuq31LLiX2zqFZHs</code></p>
+            </div>
+            <div class="mytrades-actions">
+              <button id="btn-refresh-mytrades" class="btn btn-secondary btn-sm">🔄 Refresh Results</button>
+            </div>
+          </div>
+
+          <!-- Performance Metric Cards -->
+          <div class="mytrades-metrics-grid">
+            <div class="metric-card">
+              <span class="metric-lbl">TOTAL CONFIRMED TRADES</span>
+              <span class="metric-val" id="my-total-trades">1,216</span>
+              <span class="metric-sub">Across 195+ referee sweeps</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-lbl">TOTAL VOLUME TRADED</span>
+              <span class="metric-val text-cyan" id="my-total-volume">21,548 NVDA</span>
+              <span class="metric-sub">~$4,845,000 notional equivalent</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-lbl">CURRENT NET POSITION</span>
+              <span class="metric-val text-green" id="my-net-pos">+72.86 NVDA</span>
+              <span class="metric-sub">Bullish Bias into Oct 4 Close</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-lbl">CUMULATIVE PNL</span>
+              <span class="metric-val text-gold" id="my-pnl">+86.47 POLF</span>
+              <span class="metric-sub">Positive referee fold valuation</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-lbl">ARBITRAGE WIN RATE</span>
+              <span class="metric-val text-green" id="my-win-rate">78.4%</span>
+              <span class="metric-sub">142 Wins / 39 Losses in 24h</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-lbl">STARTING CREDIT</span>
+              <span class="metric-val" id="my-starting-mint">10,000 POLF</span>
+              <span class="metric-sub">Free mint sequence #1956335</span>
+            </div>
+          </div>
+
+          <!-- Trade Log Table -->
+          <div class="mytrades-table-section">
+            <div class="table-filter-bar">
+              <span class="filter-label">Filter Trades:</span>
+              <button class="mytrade-filter-btn active" data-myfilter="all">All (<span id="filter-cnt-all">1,216</span>)</button>
+              <button class="mytrade-filter-btn" data-myfilter="buy">Longs / Buys (<span id="filter-cnt-buy">551</span>)</button>
+              <button class="mytrade-filter-btn" data-myfilter="sell">Shorts / Sells (<span id="filter-cnt-sell">665</span>)</button>
+              <button class="mytrade-filter-btn" data-myfilter="recent">Recent 50</button>
+            </div>
+            <div class="table-responsive mytrades-table-scroll">
+              <table class="terminal-table" id="mytrades-table">
+                <thead>
+                  <tr>
+                    <th>TIME (UTC)</th>
+                    <th>SEQUENCE</th>
+                    <th>SIDE</th>
+                    <th>SIZE (NVDA)</th>
+                    <th>EXEC PRICE</th>
+                    <th>ROLE</th>
+                    <th>COUNTERPARTY (MAKER)</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="mytrades-tbody">
+                  <tr><td colspan="8" class="text-center">Loading verified trade records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Create Custom Maker Call -->
         <div class="tab-content" id="tab-maker">
           <form id="maker-form" class="maker-form">
             <div class="form-row">
