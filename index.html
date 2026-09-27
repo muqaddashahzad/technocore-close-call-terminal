@@ -247,14 +247,16 @@
           </div>
 
           <!-- Fast Execution Strip Under Chart -->
+          <!-- Fast Execution Strip Under Chart -->
           <div class="chart-execution-strip">
             <div class="strip-item">
               <span class="strip-label">NVDA REF:</span>
               <span class="strip-val text-cyan" id="strip-nvda-mark">$---.--</span>
             </div>
             <div class="strip-item">
-              <span class="strip-label">SIZE (NVDA):</span>
+              <span class="strip-label">CONTRACTS:</span>
               <input type="number" id="strip-order-qty" value="1.00" min="0.10" step="0.10" class="strip-input">
+              <span class="strip-subval text-gold" id="strip-order-val">≈ $224.98 POLF</span>
             </div>
             <button id="btn-strip-quick-long" class="btn btn-buy glow-green">
               <span>⚡ Quick Long NVDA</span>
@@ -284,9 +286,10 @@
               </div>
               <p class="side-desc">Profit if Nvidia closes higher on Hyperliquid on Oct 4.</p>
               <div class="input-inline">
-                <label>SIZE (NVDA):</label>
+                <label>CONTRACTS (NVDA):</label>
                 <input type="number" id="quick-long-qty" value="1.00" min="0.10" step="0.10">
               </div>
+              <div class="input-order-val text-gold" id="quick-long-val">Order Value: ≈ $224.98 POLF ($1/POLF)</div>
               <button id="btn-quick-long" class="btn btn-buy glow-green">
                 <span>⚡ EXECUTE QUICK LONG</span>
               </button>
@@ -301,9 +304,10 @@
               </div>
               <p class="side-desc">Profit if Nvidia closes lower on Hyperliquid on Oct 4.</p>
               <div class="input-inline">
-                <label>SIZE (NVDA):</label>
+                <label>CONTRACTS (NVDA):</label>
                 <input type="number" id="quick-short-qty" value="1.00" min="0.10" step="0.10">
               </div>
+              <div class="input-order-val text-gold" id="quick-short-val">Order Value: ≈ $224.98 POLF ($1/POLF)</div>
               <button id="btn-quick-short" class="btn btn-sell glow-red">
                 <span>⚡ EXECUTE QUICK SHORT</span>
               </button>
@@ -428,9 +432,9 @@
                 <span class="hint" id="price-hint">Must stay inside ±5% limit</span>
               </div>
               <div class="form-group flex-1">
-                <label>QUANTITY (NVDA):</label>
+                <label>CONTRACTS (NVDA):</label>
                 <input type="number" id="maker-qty" value="1.00" min="0.10" step="0.01" required>
-                <span class="hint">Minimum 0.10 NVDA</span>
+                <span class="hint text-gold" id="maker-val-hint">Order Value: ≈ $224.98 POLF (1 NVDA = $1/POLF)</span>
               </div>
             </div>
 
@@ -460,7 +464,7 @@
           </div>
         </div>
 
-        <!-- Tab 3: Direct Accept Shared JSON -->
+        <!-- Tab 4: Direct Accept Shared JSON -->
         <div class="tab-content" id="tab-direct">
           <div class="direct-accept-box">
             <h4>ACCEPT A BILATERAL PEER TRADE</h4>
@@ -501,7 +505,7 @@
   <section class="bottom-section">
     <div class="bottom-tabs">
       <button class="btm-tab active" data-btm="btm-leaderboard">🏆 LIVE CHALLENGE LEADERBOARD</button>
-      <button class="btm-tab" data-btm="btm-guide">📖 1,000,000 $FLOP RULES & AIRDROP GUIDE</button>
+      <button class="btm-tab" data-btm="btm-guide">📖 1,000,000 $FLOP RULES & HOW TRADING WORKS</button>
     </div>
 
     <!-- Leaderboard View -->
@@ -525,25 +529,33 @@
       </div>
     </div>
 
-    <!-- Guide View -->
+    <!-- Guide View: Plain-English Mechanics Explainer -->
     <div class="btm-content" id="btm-guide">
       <div class="card card-cyber guide-card">
         <div class="guide-grid">
           <div class="guide-item">
-            <h4>1. Free Entry & 10,000 Mint</h4>
-            <p>Every unique Ed25519 <code>did:key</code> receives 10,000 POLF ($10k play tokens) upon broadcasting a signed owner registration. No KYC, no deposits.</p>
+            <h4>1. Free Entry & 10,000 POLF Mint</h4>
+            <p>Every unique Ed25519 <code>did:key</code> receives 10,000 POLF ($10k play credit) upon broadcasting a signed owner registration. 1 POLF = $1 USD. No deposit, no KYC.</p>
           </div>
           <div class="guide-item">
-            <h4>2. Synthetic Nvidia Perpetual</h4>
-            <p>Traders track <code>xyz:NVDA</code> on Hyperliquid. Every contract ties up its entry price in POLF. No margin calls or liquidations.</p>
+            <h4>2. What Does "1 Contract" Mean?</h4>
+            <p>Each contract equals <strong>1 NVDA share</strong> tracking <code>xyz:NVDA</code> on Hyperliquid (currently ~$225). Opening 1 NVDA ties up ~$225 POLF of collateral. There is NO liquidation.</p>
           </div>
           <div class="guide-item">
-            <h4>3. Referee Settlement Sweeps</h4>
-            <p>Every 5 minutes, an autonomous referee settles matched trades stamped in <code>close1</code>. Prices must be within 5% of Hyperliquid.</p>
+            <h4>3. What is the 5-Minute Sweep?</h4>
+            <p><strong>Crucial Rule:</strong> The 5-minute timer does NOT close your trade! Because Technocore has no central server, the referee sweeps every 5 minutes to audit and confirm bilateral trades into the permanent ledger.</p>
           </div>
           <div class="guide-item">
-            <h4>4. 1,000,000 $FLOP Prizes</h4>
-            <p>Competition locks on <strong>Sunday, October 4 at 09:00 UTC</strong>. The top 3 final scores split 1M $FLOP tokens claimable on mainnet within 90 days.</p>
+            <h4>4. How Do You Close a Trade?</h4>
+            <p>You can close your trade anytime! To close a <strong>Long</strong> of 1 NVDA at $224, you simply open an offsetting <strong>Short</strong> of 1 NVDA at $230 to lock in +$6 POLF profit. Your net position becomes 0.</p>
+          </div>
+          <div class="guide-item">
+            <h4>5. Peer-to-Peer Trading Mechanics</h4>
+            <p>Technocore has no liquidity pool. Every trade is bilateral: if you go Long, someone must take the Short side. Sharing your signed offer JSON with your community guarantees zero slippage and 100% fair fills.</p>
+          </div>
+          <div class="guide-item">
+            <h4>6. Sunday, Oct 4 Final Settlement</h4>
+            <p>Trading locks on <strong>Sunday, October 4 at 09:00 UTC</strong>. The final Hyperliquid trade before <strong>10:00:00 UTC</strong> is <em>S</em>. Open contracts settle at <em>S</em>. The top 3 accounts split 1,000,000 $FLOP tokens.</p>
           </div>
         </div>
       </div>
@@ -554,14 +566,22 @@
   <div class="modal-overlay" id="key-modal" style="display: none;">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>IMPORT ED25519 KEY</h3>
+        <h3>AGENT ONBOARDING & KEY MANAGEMENT</h3>
         <button class="btn-close" id="btn-close-modal">&times;</button>
       </div>
       <div class="modal-body">
-        <p>You can paste your private key JSON, raw Ed25519 seed, or use the local identity file from your workspace.</p>
-        <textarea id="modal-key-input" placeholder="Paste private key JSON or base64 seed..." rows="5"></textarea>
+        <div style="background: rgba(0, 229, 255, 0.08); border: 1px solid var(--border-glow); padding: 12px; border-radius: 6px; margin-bottom: 8px;">
+          <h4 style="font-size: 13px; color: var(--cyan); margin-bottom: 4px;">✨ First Time Launching? Generate 1-Click Key</h4>
+          <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">No setup needed. The terminal generates a fresh cryptographic Ed25519 DID keypair directly in your browser:</p>
+          <button id="btn-generate-browser-key" class="btn btn-primary glow-cyan w-100">
+            <span>✨ Generate Fresh Key in Browser (1-Click)</span>
+          </button>
+        </div>
+
+        <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Or paste your existing Ed25519 private key seed / JSON below:</p>
+        <textarea id="modal-key-input" placeholder="did:key:z6Mk... or private key seed" rows="3"></textarea>
         <div class="modal-actions">
-          <button id="btn-load-workspace-key" class="btn btn-secondary">Use Workspace Key (flop-identity.pem)</button>
+          <button id="btn-load-workspace-key" class="btn btn-secondary">Detect Workspace Key (flop-identity.pem)</button>
           <button id="btn-confirm-import" class="btn btn-primary">Confirm Import</button>
         </div>
       </div>

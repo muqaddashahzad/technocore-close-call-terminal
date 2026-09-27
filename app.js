@@ -955,9 +955,84 @@ function setupEvents() {
     }
   });
 
+  // Dynamic order value calculation on user input
+  function updateOrderValuePreviews() {
+    const ref = STATE.refPrice || 224.98;
+    if (el.stripOrderQty) {
+      const q = parseFloat(el.stripOrderQty.value) || 0;
+      const stripVal = document.getElementById('strip-order-val');
+      if (stripVal) stripVal.textContent = `≈ $${(q * ref).toFixed(2)} POLF`;
+    }
+    if (el.quickLongQty) {
+      const q = parseFloat(el.quickLongQty.value) || 0;
+      const valElem = document.getElementById('quick-long-val');
+      if (valElem) valElem.textContent = `Order Value: ≈ $${(q * ref).toFixed(2)} POLF ($1/POLF)`;
+    }
+    if (el.quickShortQty) {
+      const q = parseFloat(el.quickShortQty.value) || 0;
+      const valElem = document.getElementById('quick-short-val');
+      if (valElem) valElem.textContent = `Order Value: ≈ $${(q * ref).toFixed(2)} POLF ($1/POLF)`;
+    }
+    if (el.makerQty) {
+      const q = parseFloat(el.makerQty.value) || 0;
+      const px = parseFloat(el.makerPx.value) || ref;
+      const hint = document.getElementById('maker-val-hint');
+      if (hint) hint.textContent = `Order Value: ≈ $${(q * px).toFixed(2)} POLF (1 NVDA = $1/POLF)`;
+    }
+  }
+
+  // Attach input listeners
+  if (el.stripOrderQty) el.stripOrderQty.addEventListener('input', updateOrderValuePreviews);
+  if (el.quickLongQty) el.quickLongQty.addEventListener('input', updateOrderValuePreviews);
+  if (el.quickShortQty) el.quickShortQty.addEventListener('input', updateOrderValuePreviews);
+  if (el.makerQty) el.makerQty.addEventListener('input', updateOrderValuePreviews);
+  if (el.makerPx) el.makerPx.addEventListener('input', updateOrderValuePreviews);
+
+  // Initial calculation
+  updateOrderValuePreviews();
+
   // Modal
   el.btnImportKey.addEventListener('click', () => el.keyModal.style.display = 'flex');
   el.btnCloseModal.addEventListener('click', () => el.keyModal.style.display = 'none');
+
+  // 1-Click Key Generator in Browser (Web Crypto + Base58)
+  const btnGenKey = document.getElementById('btn-generate-browser-key');
+  if (btnGenKey) {
+    btnGenKey.addEventListener('click', async () => {
+      try {
+        const randBytes = new Uint8Array(32);
+        window.crypto.getRandomValues(randBytes);
+        const codecPub = new Uint8Array(34);
+        codecPub[0] = 0xed;
+        codecPub[1] = 0x01;
+        codecPub.set(randBytes, 2);
+
+        // Base58 Encode
+        const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+        let n = 0n;
+        for (const byte of codecPub) n = (n << 8n) | BigInt(byte);
+        let res = '';
+        while (n > 0n) {
+          const rem = Number(n % 58n);
+          n = n / 58n;
+          res = ALPHABET[rem] + res;
+        }
+        let pad = 0;
+        for (const byte of codecPub) {
+          if (byte === 0) pad++;
+          else break;
+        }
+        const did = 'did:key:z' + ('1'.repeat(pad) + res);
+
+        localStorage.setItem('technocore_custom_key', JSON.stringify({ did }));
+        activateCustomKey(did);
+        el.keyModal.style.display = 'none';
+        logConsole(`✅ Generated fresh browser Ed25519 identity: ${did.slice(0, 22)}... Click "1-Click Register" to mint your 10,000 POLF!`, true);
+      } catch (e) {
+        alert('Key generation failed: ' + e.message);
+      }
+    });
+  }
 
   if (el.btnConfirmImport) {
     el.btnConfirmImport.addEventListener('click', () => {
