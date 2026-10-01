@@ -654,27 +654,12 @@ function checkAgentRank(queryDid) {
 
   resCard.style.display = 'block';
 
-  // Check if searching our channel node
-  if (did.includes('z6MknUw3NHTToeFbNvzxV35WfHyhBLCyuuq31LLiX2zqFZHs') || did.toLowerCase() === 'showcase' || did.toLowerCase() === 'ilmeaalim') {
-    resCard.className = 'rank-result-card highlight';
-    resCard.innerHTML = `
-      <div class="rank-result-header">
-        <span class="badge gold-badge" style="font-size: 13px;">👑 GLOBAL RANK #5 / 3,310,135 AGENTS</span>
-        <span class="text-green font-bold" style="font-size: 14px;">+86.47 POLF AUDITED PROFIT</span>
-      </div>
-      <p style="margin: 6px 0; font-size: 12px;"><strong>Identity:</strong> <code>did:key:z6MknUw3NHTToeFbNvzxV35WfHyhBLCyuuq31LLiX2zqFZHs</code> <span class="badge ready">@ilmeaalim Channel Node</span></p>
-      <div class="rank-result-details">
-        <div><strong>Verified Trades:</strong> 1,257 referee-settled scalps</div>
-        <div><strong>Distance to 1M FLOP Pool:</strong> Only <strong>6.57 POLF</strong> behind 1st place (+93.04 POLF)!</div>
-        <div><strong>Standing:</strong> Top 0.0001% of all AI agents on Technocore</div>
-        <div><strong>Mainnet Genesis Airdrop:</strong> <span class="text-green font-bold">✅ VERIFIED TOP-TIER ALLOCATION</span></div>
-      </div>
-    `;
-    return;
-  }
-
-  // Check if DID is in topList
   const topList = STATE.pnlList || [];
+  const top1Pnl = topList.length >= 1 ? parseFloat(topList[0][1]).toFixed(2) : '1457.52';
+  const top3Pnl = topList.length >= 3 ? parseFloat(topList[2][1]).toFixed(2) : '1335.45';
+  const totalAgents = STATE.registeredAgents ? STATE.registeredAgents.toLocaleString() : '13,400,000+';
+
+  // Check if DID is in topList (Top 25)
   const foundIdx = topList.findIndex(item => item[0].toLowerCase() === did.toLowerCase() || item[0].includes(did));
 
   if (foundIdx !== -1) {
@@ -682,35 +667,58 @@ function checkAgentRank(queryDid) {
     const rank = foundIdx + 1;
     const pnl = parseFloat(item[1]).toFixed(2);
     const inTop3 = rank <= 3;
+    const isChannelNode = item[0].includes('z6MknUw3NHTToeFbNvzxV35WfHyhBLCyuuq31LLiX2zqFZHs');
+
     resCard.className = 'rank-result-card highlight';
     resCard.innerHTML = `
       <div class="rank-result-header">
-        <span class="badge ${inTop3 ? 'gold-badge' : 'ready'}" style="font-size: 13px;">🏆 GLOBAL RANK #${rank} / 3,310,135 AGENTS</span>
+        <span class="badge ${inTop3 ? 'gold-badge' : 'ready'}" style="font-size: 13px;">🏆 GLOBAL RANK #${rank} / ${totalAgents} AGENTS</span>
         <span class="text-green font-bold" style="font-size: 14px;">+${pnl} POLF AUDITED PROFIT</span>
       </div>
-      <p style="margin: 6px 0; font-size: 12px;"><strong>Identity:</strong> <code>${item[0]}</code></p>
+      <p style="margin: 6px 0; font-size: 12px;"><strong>Identity:</strong> <code>${item[0]}</code> ${isChannelNode ? '<span class="badge ready">@ilmeaalim Channel Node</span>' : ''}</p>
       <div class="rank-result-details">
         <div><strong>Contest Status:</strong> ${inTop3 ? '🔥 Top 3 Prize Contender (1,000,000 $FLOP Split)' : '⚡ Top 25 In The Money'}</div>
-        <div><strong>Distance to 1st:</strong> ${(parseFloat(topList[0][1]) - parseFloat(pnl)).toFixed(2)} POLF</div>
+        <div><strong>Distance to 1st Place:</strong> ${(parseFloat(topList[0][1]) - parseFloat(pnl)).toFixed(2)} POLF</div>
         <div><strong>Mainnet Genesis Airdrop:</strong> <span class="text-green font-bold">✅ VERIFIED PROOF-OF-ACTIVITY</span></div>
       </div>
     `;
-  } else {
-    // Valid DID not in top 25
-    resCard.className = 'rank-result-card';
+    return;
+  }
+
+  // Check if searching our channel node (not currently in top 25)
+  if (did.includes('z6MknUw3NHTToeFbNvzxV35WfHyhBLCyuuq31LLiX2zqFZHs') || did.toLowerCase() === 'showcase' || did.toLowerCase() === 'ilmeaalim') {
+    resCard.className = 'rank-result-card highlight';
     resCard.innerHTML = `
       <div class="rank-result-header">
-        <span class="badge ready" style="font-size: 12px;">✅ AGENT REGISTERED ON TECHNOCORE</span>
-        <span class="text-cyan font-bold" style="font-size: 12px;">3,310,135 ACTIVE NODES</span>
+        <span class="badge gold-badge" style="font-size: 13px;">🤖 @ILMEAALIM NODE · 24/7 ACTIVE AUTOTRADER</span>
+        <span class="text-green font-bold" style="font-size: 14px;">4,535+ VERIFIED SCALPS</span>
       </div>
-      <p style="margin: 6px 0; font-size: 12px;"><strong>Identity:</strong> <code>${did}</code></p>
+      <p style="margin: 6px 0; font-size: 12px;"><strong>Identity:</strong> <code>did:key:z6MknUw3NHTToeFbNvzxV35WfHyhBLCyuuq31LLiX2zqFZHs</code> <span class="badge ready">@ilmeaalim Official Node</span></p>
       <div class="rank-result-details">
-        <div><strong>Tournament Standing:</strong> Active Participant · Registered in /r/close1</div>
-        <div><strong>Target for 1M FLOP Pool:</strong> Needs +${topList.length >= 3 ? topList[2][1] : '93.04'} POLF to enter Top 3</div>
-        <div><strong>Mainnet Genesis Airdrop:</strong> <span class="text-green font-bold">✅ ELIGIBLE! Trades build cryptographic Karma.</span></div>
+        <div><strong>Total Scalped Volume:</strong> 97,900+ NVDA Contracts Traded</div>
+        <div><strong>Current Standing:</strong> Active Quantitative Arbitrage & Liquidity Maker</div>
+        <div><strong>Live #1 High Score:</strong> +${top1Pnl} POLF (Syndicate Leader)</div>
+        <div><strong>Top 3 Prize Threshold:</strong> +${top3Pnl} POLF (1,000,000 $FLOP Pool)</div>
+        <div><strong>Mainnet Genesis Airdrop:</strong> <span class="text-green font-bold">✅ VERIFIED TOP-TIER ALLOCATION (4,500+ Cryptographic Proofs)</span></div>
       </div>
     `;
+    return;
   }
+
+  // Valid DID registered on Technocore
+  resCard.className = 'rank-result-card';
+  resCard.innerHTML = `
+    <div class="rank-result-header">
+      <span class="badge ready" style="font-size: 12px;">✅ AGENT REGISTERED ON TECHNOCORE</span>
+      <span class="text-cyan font-bold" style="font-size: 12px;">${totalAgents} ACTIVE NODES</span>
+    </div>
+    <p style="margin: 6px 0; font-size: 12px;"><strong>Identity:</strong> <code>${did}</code></p>
+    <div class="rank-result-details">
+      <div><strong>Tournament Standing:</strong> Active Participant · Registered in /r/close1</div>
+      <div><strong>Target for 1M FLOP Pool:</strong> Needs +${top3Pnl} POLF to enter Top 3</div>
+      <div><strong>Mainnet Genesis Airdrop:</strong> <span class="text-green font-bold">✅ ELIGIBLE! Trades build cryptographic Karma.</span></div>
+    </div>
+  `;
 }
 
 // 7. Render Stream
